@@ -1,0 +1,6 @@
+@TaskPulse_HostAddress = http://localhost:5048
+
+GET {{TaskPulse_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,7 @@
+﻿services:
+  taskpulse:
+    image: taskpulse
+    build:
+      context: .
+      dockerfile: TaskPulse/Dockerfile
+
