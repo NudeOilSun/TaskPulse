@@ -20,16 +20,13 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task CreateTask_ValidRequest_ReturnsCreated()
     {
         // Arrange
-        var request = new CreateTaskRequest
-        {
-            Title = "test",
-            DueDate = DateTime.UtcNow.AddDays(1)
-        };
+        var request = new CreateTaskRequest("test", DateTime.UtcNow.AddDays(1));
 
         // Act
         var response = await _client.PostAsJsonAsync("/tasks", request);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
+        response.Headers.Location.Should().NotBeNull();
     }
 }

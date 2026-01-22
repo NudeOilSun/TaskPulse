@@ -1,8 +1,3 @@
 namespace TaskPulse;
 
-public class CreateTaskRequest
-{
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public DateTime DueDate { get; set; }
-}
+public record CreateTaskRequest(string Title, DateTime DueDate);

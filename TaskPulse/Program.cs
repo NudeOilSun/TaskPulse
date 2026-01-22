@@ -1,20 +1,42 @@
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using TaskPulse;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<TaskPulseDb>(opt => opt.UseInMemoryDatabase("TaskPulseDb"));
+var connection = new SqliteConnection("DataSource=:memory:");
+connection.Open();
+
+builder.Services.AddDbContext<TaskPulseDb>(options =>
+{
+    options.UseSqlite(connection);
+});
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 var app = builder.Build();
 
-
-app.MapPost("/tasks", async (CreateTaskRequest todo, TaskPulseDb db) =>
+using (var scope = app.Services.CreateScope())
 {
-    db.Todos.Add(todo);
-    await db.SaveChangesAsync();
+    var db = scope.ServiceProvider.GetRequiredService<TaskPulseDb>();
+    db.Database.EnsureCreated();
+}
 
-    return Results.Created($"/todoitems/{todo.Id}", todo);
+
+app.MapPost("/tasks", async (
+    CreateTaskRequest request,
+    TaskPulseDb db,
+    CancellationToken ct) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Title))
+        return Results.BadRequest("Title is required");
+
+    var task = new TaskItem(request.Title, request.DueDate);
+
+    db.Tasks.Add(task);
+    await db.SaveChangesAsync(ct);
+
+    return Results.Created($"/tasks/{task.Id}", task);
 });
 
 app.Run();

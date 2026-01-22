@@ -9,18 +9,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="12925707-07d8-46bd-9015-154127319fff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/TaskPulse/CreateTaskRequest.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TaskPulse/TaskPulseDb.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TaskPulse/TaskItem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TaskPulse/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TaskPulse/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TaskPulse/CreateTaskRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse/CreateTaskRequest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TaskPulse/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TaskPulse/TaskPulse.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse/TaskPulse.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TaskPulse/TaskPulseDb.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse/TaskPulseDb.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -51,6 +55,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "930ad625-3944-449d-b6c0-70d08652bcd0.executor": "Debug",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -141,7 +146,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1769017312665</updated>
-      <workItem from="1769017315045" duration="1806000" />
+      <workItem from="1769017315045" duration="3317000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -179,6 +184,19 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/TaskPulse/Program.cs</url>
+          <line>29</line>
+          <properties documentPath="$PROJECT_DIR$/TaskPulse/Program.cs" containingFunctionPresentation="">
+            <startOffsets>
+              <option value="668" />
+            </startOffsets>
+            <endOffsets>
+              <option value="669" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

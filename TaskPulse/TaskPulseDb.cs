@@ -7,5 +7,5 @@ public class TaskPulseDb : DbContext
     public TaskPulseDb(DbContextOptions<TaskPulseDb> options)
         : base(options) { }
 
-    public DbSet<CreateTaskRequest> Todos => Set<CreateTaskRequest>();
+    public DbSet<TaskItem> Tasks => Set<TaskItem>();
 }
