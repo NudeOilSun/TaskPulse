@@ -9,10 +9,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="12925707-07d8-46bd-9015-154127319fff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/TaskPulse/UpdateTaskRequest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TaskPulse/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TaskPulse/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TaskPulse/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TaskPulse/TaskItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse/TaskItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TaskPulse/UpdateTaskRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse/UpdateTaskRequest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,22 +50,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;930ad625-3944-449d-b6c0-70d08652bcd0.executor&quot;: &quot;Debug&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.TaskPulse: http.executor": "Run",
+    "930ad625-3944-449d-b6c0-70d08652bcd0.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.TaskPulse: http">
     <configuration name="TaskPulse: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/TaskPulse/TaskPulse.csproj" />
@@ -150,7 +151,7 @@
       <option name="presentableId" value="Default" />
       <updated>1769017312665</updated>
       <workItem from="1769017315045" duration="3524000" />
-      <workItem from="1769605823938" duration="1768000" />
+      <workItem from="1769605823938" duration="3292000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -203,29 +204,42 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/TaskPulse/Program.cs</url>
-          <line>56</line>
+          <line>60</line>
           <properties documentPath="$PROJECT_DIR$/TaskPulse/Program.cs" containingFunctionPresentation="">
             <startOffsets>
-              <option value="1380" />
+              <option value="1504" />
             </startOffsets>
             <endOffsets>
-              <option value="1381" />
+              <option value="1505" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs</url>
-          <line>93</line>
+          <line>117</line>
           <properties documentPath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" containingFunctionPresentation="Method 'PutTask_ValidRequest_ReturnsNoContent'">
             <startOffsets>
-              <option value="2656" />
+              <option value="3458" />
             </startOffsets>
             <endOffsets>
-              <option value="2657" />
+              <option value="3459" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/TaskPulse/Program.cs</url>
+          <line>42</line>
+          <properties documentPath="$PROJECT_DIR$/TaskPulse/Program.cs" containingFunctionPresentation="">
+            <startOffsets>
+              <option value="1010" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1011" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -39,11 +39,15 @@ app.MapPost("/tasks", async (
     return Results.Created($"/tasks/{task.Id}", task);
 });
 
-app.MapGet("/tasks", async (TaskPulseDb db) => 
-    
-await db.Tasks
-    .AsNoTracking()
-    .ToListAsync()
+app.MapGet("/tasks", async (TaskPulseDb db) =>
+    {
+        var tasks = await db.Tasks
+            .AsNoTracking()
+            .Where(t => !t.IsDeleted)
+            .ToListAsync();
+        
+        return Results.Ok(tasks);
+    }
 );
 
 
@@ -61,12 +65,27 @@ app.MapPut("/tasks/{id:int}", async (int id, UpdateTaskRequest updateTaskRequest
         return Results.NotFound();
     }
     
-    task.Title = updateTaskRequest.Title;
-    task.DueDate = updateTaskRequest.DueDate;
+    task.Update(updateTaskRequest.Title, updateTaskRequest.DueDate);
     
     db.Tasks.Update(task);
     await db.SaveChangesAsync();
     
+    return Results.NoContent();
+});
+
+app.MapPut("/tasks/{id:int}/complete", async (int id, TaskPulseDb db) =>
+{
+    var task = await db.Tasks.FirstOrDefaultAsync(t => t.Id == id);
+    if (task == null)
+    {
+        return Results.NotFound();
+    }
+
+    task.UpdateCompleted();
+
+    db.Tasks.Update(task);
+    await db.SaveChangesAsync();
+
     return Results.NoContent();
 });
 
@@ -78,7 +97,8 @@ app.MapDelete("/tasks/{id:int}", async (int id, TaskPulseDb db) =>
         return Results.NotFound();
     }
 
-    db.Tasks.Remove(task);
+    task.Delete();
+
     await db.SaveChangesAsync();
     return Results.NoContent();
 });

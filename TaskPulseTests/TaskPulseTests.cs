@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using TaskPulse;
@@ -66,6 +67,29 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
         var tasks = await response.Content.ReadFromJsonAsync<List<TaskItem>>();
         tasks.Should().HaveCountGreaterThan(1);
         tasks.Should().Contain(t => t.Title == "Title 1");
+    }  
+    
+    [Fact]
+    public async Task GetTasks_ValidRequest_ReturnsNoDeletedTasks()
+    {
+        //Arrange
+        var testTasks = new List<TaskItem>
+        {
+            new TaskItem("Title 1", DateTime.UtcNow.AddDays(1), isDeleted: true),
+            new TaskItem("naughty", DateTime.UtcNow.AddDays(2), isDeleted: false),
+        };
+    
+        // Seed the database with test data
+        await SeedDatabaseAsync(testTasks);
+    
+        // Act
+        var response = await _client.GetAsync("/tasks");
+    
+        //Assert
+        response.EnsureSuccessStatusCode();
+        var tasks = await response.Content.ReadFromJsonAsync<List<TaskItem>>();
+        tasks.Should().Contain(t => t.Title == "Title 2");
+        tasks.Should().NotContain(t => t.Title == "naughty");
     }
 
     [Fact]
@@ -110,6 +134,24 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
+    public async Task CompleteTask_UpdateIsCompleted_UpdatesIsCompleted()
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1), isCompleted: false);
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+    
+        // Act
+        var response = await _client.PutAsync("/tasks/1/complete", null);
+    
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    
+        var updatedTask = await GetTaskFromDatabaseAsync(1);
+        updatedTask.Should().NotBeNull();
+        updatedTask!.IsCompleted.Should().BeTrue();
+    }
+
+    [Fact]
     public async void DeleteTask_ValidRequest_ReturnsNoContent()
     {
         // Arrange
@@ -121,6 +163,22 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }  
+    
+    [Fact]
+    public async void DeleteTask_ValidRequest_MarksTaskAsDeleted()
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+        
+        // Act
+        var response = await _client.DeleteAsync("/tasks/1");
+
+        // Assert
+        var updatedTask = await GetTaskFromDatabaseAsync(1);
+        updatedTask.Should().NotBeNull();
+        updatedTask!.IsDeleted.Should().BeTrue();
     }
     
     private async Task SeedDatabaseAsync(List<TaskItem> tasks)
@@ -130,5 +188,13 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
     
         await dbContext.Tasks.AddRangeAsync(tasks);
         await dbContext.SaveChangesAsync();
+    }
+    
+    private async Task<TaskItem?> GetTaskFromDatabaseAsync(int id)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<TaskPulseDb>();
+    
+        return await dbContext.Tasks.FirstOrDefaultAsync(t => t.Id == id);
     }
 }
