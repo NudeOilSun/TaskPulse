@@ -2,10 +2,10 @@ namespace TaskPulse;
 
 public class TaskItem
 {
-    public int Id { get; private set; }
-    public string Title { get; private set; } = default!;
-    public DateTime DueDate { get; private set; }
-    public bool IsCompleted { get; private set; }
+    public int Id { get;set; }
+    public string Title { get;set; } = default!;
+    public DateTime DueDate { get; set; }
+    public bool IsCompleted { get; set; }
 
     private TaskItem() { } // EF
 

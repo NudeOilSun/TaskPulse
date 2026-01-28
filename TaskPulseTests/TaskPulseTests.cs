@@ -2,6 +2,8 @@ using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using TaskPulse;
 using Xunit;
 
@@ -10,10 +12,12 @@ namespace TestProjectTests;
 public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
+    private readonly WebApplicationFactory<Program> _factory;
 
     public TaskPulseTests(WebApplicationFactory<Program> factory)
     {
         _client = factory.CreateClient();
+        _factory = factory;
     }
 
     [Fact]
@@ -28,5 +32,103 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         response.Headers.Location.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task GetTasks_ValidRequest_ReturnsOk()
+    {
+        // Act
+        var response = await _client.GetAsync("/tasks");
+
+        //Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+    }
+    
+    [Fact]
+    public async Task GetTasks_ValidRequest_ReturnsAllTasks()
+    {
+        //Arrange
+        var testTasks = new List<TaskItem>
+        {
+            new TaskItem("Title 1", DateTime.UtcNow.AddDays(1)),
+            new TaskItem("Title 2", DateTime.UtcNow.AddDays(2)),
+        };
+    
+        // Seed the database with test data
+        await SeedDatabaseAsync(testTasks);
+    
+        // Act
+        var response = await _client.GetAsync("/tasks");
+    
+        //Assert
+        response.EnsureSuccessStatusCode();
+        var tasks = await response.Content.ReadFromJsonAsync<List<TaskItem>>();
+        tasks.Should().HaveCountGreaterThan(1);
+        tasks.Should().Contain(t => t.Title == "Title 1");
+    }
+
+    [Fact]
+    public async void GetTaskById_ValidRequest_ReturnsOk()
+    {
+        //Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
+    
+        // Seed the database with test data
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+    
+        // Act
+        var response = await _client.GetAsync("/tasks/1");
+    
+        //Assert
+        response.EnsureSuccessStatusCode();
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var task = await response.Content.ReadFromJsonAsync<TaskItem>();
+        task.Should().NotBeNull();
+        task.Id.Should().Be(1);
+    }
+
+    [Fact]
+    public async void PutTask_ValidRequest_ReturnsNoContent()
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+
+        UpdateTaskRequest updateTaskRequest = new()
+        {
+            Title = "Update",
+            DueDate = DateTime.UtcNow.AddDays(2)
+        };
+        
+        // Act
+        var response = await _client.PutAsJsonAsync("/tasks/1", updateTaskRequest);
+        
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+
+    [Fact]
+    public async void DeleteTask_ValidRequest_ReturnsNoContent()
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+        
+        // Act
+        var response = await _client.DeleteAsync("/tasks/1");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+    
+    private async Task SeedDatabaseAsync(List<TaskItem> tasks)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<TaskPulseDb>();
+    
+        await dbContext.Tasks.AddRangeAsync(tasks);
+        await dbContext.SaveChangesAsync();
     }
 }
