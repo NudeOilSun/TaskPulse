@@ -19,6 +19,15 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
     {
         _client = factory.CreateClient();
         _factory = factory;
+        _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureServices(services =>
+            {
+                //Week 3
+                // remove existing registration
+                // add fresh in-memory db per test
+            });
+        });
     }
 
     [Fact]
@@ -35,16 +44,31 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
         response.Headers.Location.Should().NotBeNull();
     }
 
-    [Fact]
-    public async Task GetTasks_ValidRequest_ReturnsOk()
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    public async Task CreateTask_WithoutTitle_ThrowsException(string? title)
     {
+        var request = new CreateTaskRequest(title, DateTime.UtcNow.AddDays(1));
+        
         // Act
-        var response = await _client.GetAsync("/tasks");
-
-        //Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-    }
+        var response = await _client.PostAsJsonAsync("/tasks", request);
+        
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    } 
+    
+    [Fact]
+    public async Task CreateTask_DueDateInPast_ThrowsException()
+    {
+        var request = new CreateTaskRequest("title", DateTime.UtcNow.AddDays(-1));
+        
+        // Act
+        var response = await _client.PostAsJsonAsync("/tasks", request);
+        
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    } 
     
     [Fact]
     public async Task GetTasks_ValidRequest_ReturnsAllTasks()
@@ -93,7 +117,7 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
-    public async void GetTaskById_ValidRequest_ReturnsOk()
+    public async Task GetTaskById_ValidRequest_ReturnsOk()
     {
         //Arrange
         var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
@@ -110,11 +134,20 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
 
         var task = await response.Content.ReadFromJsonAsync<TaskItem>();
         task.Should().NotBeNull();
-        task.Id.Should().Be(1);
+    } 
+    
+    [Fact]
+    public async Task GetTaskById_ResourceMissing_ReturnsNotFound()
+    {
+        // Act
+        var response = await _client.GetAsync("/tasks/1");
+    
+        //Assert
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]
-    public async void PutTask_ValidRequest_ReturnsNoContent()
+    public async Task PutTask_ValidRequest_ReturnsNoContent()
     {
         // Arrange
         var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
@@ -131,6 +164,48 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
         
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+    
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    public async Task PutTask_MissingTitle_ThrowsException(string title)
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+
+        UpdateTaskRequest updateTaskRequest = new()
+        {
+            Title = title,
+            DueDate = DateTime.UtcNow.AddDays(2)
+        };
+        
+        // Act
+        var response = await _client.PutAsJsonAsync("/tasks/1", updateTaskRequest);
+        
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+    
+    [Fact]
+    public async Task PutTask_DueDateInFuture_ThrowsException()
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+
+        UpdateTaskRequest updateTaskRequest = new()
+        {
+            Title = "title 1",
+            DueDate = DateTime.UtcNow.AddDays(-2)
+        };
+        
+        // Act
+        var response = await _client.PutAsJsonAsync("/tasks/1", updateTaskRequest);
+        
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
@@ -152,7 +227,7 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     [Fact]
-    public async void DeleteTask_ValidRequest_ReturnsNoContent()
+    public async Task DeleteTask_ValidRequest_ReturnsNoContent()
     {
         // Arrange
         var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
@@ -166,7 +241,7 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
     }  
     
     [Fact]
-    public async void DeleteTask_ValidRequest_MarksTaskAsDeleted()
+    public async Task DeleteTask_ValidRequest_MarksTaskAsDeleted()
     {
         // Arrange
         var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));

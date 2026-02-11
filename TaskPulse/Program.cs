@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using TaskPulse;
@@ -22,15 +23,25 @@ using (var scope = app.Services.CreateScope())
     db.Database.EnsureCreated();
 }
 
+app.UseExceptionHandler(appBuilder =>
+{
+    appBuilder.Run(async context =>
+    {
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+        if (exception is ArgumentException)
+        {
+            context.Response.StatusCode = 400;
+            await context.Response.WriteAsync(exception.Message);
+        }
+    });
+});
 
 app.MapPost("/tasks", async (
     CreateTaskRequest request,
     TaskPulseDb db,
     CancellationToken ct) =>
 {
-    if (string.IsNullOrWhiteSpace(request.Title))
-        return Results.BadRequest("Title is required");
-
     var task = new TaskItem(request.Title, request.DueDate);
 
     db.Tasks.Add(task);
@@ -53,7 +64,10 @@ app.MapGet("/tasks", async (TaskPulseDb db) =>
 
 app.MapGet("/tasks/{id:int}", async (int id, TaskPulseDb db) =>
 {
-    var task = await db.Tasks.FirstOrDefaultAsync(t => t.Id == id);
+    var task = await db.Tasks
+        .AsNoTracking()
+        .FirstOrDefaultAsync(t => t.Id == id);
+    
     return task is not null ? Results.Ok(task) : Results.NotFound();
 });
 
@@ -67,7 +81,6 @@ app.MapPut("/tasks/{id:int}", async (int id, UpdateTaskRequest updateTaskRequest
     
     task.Update(updateTaskRequest.Title, updateTaskRequest.DueDate);
     
-    db.Tasks.Update(task);
     await db.SaveChangesAsync();
     
     return Results.NoContent();
@@ -81,7 +94,7 @@ app.MapPut("/tasks/{id:int}/complete", async (int id, TaskPulseDb db) =>
         return Results.NotFound();
     }
 
-    task.UpdateCompleted();
+    task.MarkCompleted();
 
     db.Tasks.Update(task);
     await db.SaveChangesAsync();

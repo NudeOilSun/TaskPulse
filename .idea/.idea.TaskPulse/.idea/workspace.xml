@@ -8,7 +8,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12925707-07d8-46bd-9015-154127319fff" name="Changes" comment="" />
+    <list default="true" id="12925707-07d8-46bd-9015-154127319fff" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.TaskPulse/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TaskPulse/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TaskPulse.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TaskPulse/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TaskPulse/TaskItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse/TaskItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,6 +38,10 @@
     &quot;accountId&quot;: &quot;bd85b1ac-f87e-4be5-a382-c357ea40fb34&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8ed35d6c2819e04ca78be5829523271950ff45a84d609a837ef80d86ff592/RequestDelegateFactory.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -146,6 +156,7 @@
       <updated>1769017312665</updated>
       <workItem from="1769017315045" duration="3524000" />
       <workItem from="1769605823938" duration="3649000" />
+      <workItem from="1770833517844" duration="1909000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -155,7 +166,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769017525467</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="fixed unit test">
+      <option name="closed" value="true" />
+      <created>1770833695297</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1770833695297</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -166,7 +185,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Initial Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial Commit" />
+    <MESSAGE value="fixed unit test" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed unit test" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -185,55 +205,68 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/TaskPulse/Program.cs</url>
-          <line>29</line>
+          <line>43</line>
           <properties documentPath="$PROJECT_DIR$/TaskPulse/Program.cs" containingFunctionPresentation="">
             <startOffsets>
-              <option value="668" />
+              <option value="1061" />
             </startOffsets>
             <endOffsets>
-              <option value="669" />
+              <option value="1062" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/TaskPulse/Program.cs</url>
-          <line>60</line>
-          <properties documentPath="$PROJECT_DIR$/TaskPulse/Program.cs" containingFunctionPresentation="">
-            <startOffsets>
-              <option value="1504" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1505" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs</url>
-          <line>117</line>
+          <line>141</line>
           <properties documentPath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" containingFunctionPresentation="Method 'PutTask_ValidRequest_ReturnsNoContent'">
             <startOffsets>
-              <option value="3475" />
+              <option value="4262" />
             </startOffsets>
             <endOffsets>
-              <option value="3476" />
+              <option value="4263" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/TaskPulse/Program.cs</url>
-          <line>42</line>
+          <line>53</line>
           <properties documentPath="$PROJECT_DIR$/TaskPulse/Program.cs" containingFunctionPresentation="">
             <startOffsets>
-              <option value="1010" />
+              <option value="1296" />
             </startOffsets>
             <endOffsets>
-              <option value="1011" />
+              <option value="1297" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/TaskPulse/Program.cs</url>
+          <line>74</line>
+          <properties documentPath="$PROJECT_DIR$/TaskPulse/Program.cs" containingFunctionPresentation="">
+            <startOffsets>
+              <option value="1828" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1829" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/TaskPulse/TaskItem.cs</url>
+          <line>15</line>
+          <properties documentPath="$PROJECT_DIR$/TaskPulse/TaskItem.cs" containingFunctionPresentation="Constructor 'TaskItem'">
+            <startOffsets>
+              <option value="447" />
+            </startOffsets>
+            <endOffsets>
+              <option value="448" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
