@@ -75,8 +75,8 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
         //Arrange
         var testTasks = new List<TaskItem>
         {
-            new TaskItem("Title 1", DateTime.UtcNow.AddDays(1), isDeleted: true),
-            new TaskItem("naughty", DateTime.UtcNow.AddDays(2), isDeleted: false),
+            new TaskItem("Title 1", DateTime.UtcNow.AddDays(1), isDeleted: false),
+            new TaskItem("naughty", DateTime.UtcNow.AddDays(2), isDeleted: true),
         };
     
         // Seed the database with test data
@@ -88,7 +88,7 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
         //Assert
         response.EnsureSuccessStatusCode();
         var tasks = await response.Content.ReadFromJsonAsync<List<TaskItem>>();
-        tasks.Should().Contain(t => t.Title == "Title 2");
+        tasks.Should().Contain(t => t.Title == "Title 1");
         tasks.Should().NotContain(t => t.Title == "naughty");
     }
 
