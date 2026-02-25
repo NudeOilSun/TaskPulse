@@ -8,13 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12925707-07d8-46bd-9015-154127319fff" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.TaskPulse/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.TaskPulse/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TaskPulse.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TaskPulse/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TaskPulse/TaskItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulse/TaskItem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" afterDir="false" />
-    </list>
+    <list default="true" id="12925707-07d8-46bd-9015-154127319fff" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -156,7 +150,7 @@
       <updated>1769017312665</updated>
       <workItem from="1769017315045" duration="3524000" />
       <workItem from="1769605823938" duration="3649000" />
-      <workItem from="1770833517844" duration="1909000" />
+      <workItem from="1770833517844" duration="2192000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -218,13 +212,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs</url>
-          <line>141</line>
+          <line>150</line>
           <properties documentPath="$PROJECT_DIR$/TaskPulseTests/TaskPulseTests.cs" containingFunctionPresentation="Method 'PutTask_ValidRequest_ReturnsNoContent'">
             <startOffsets>
-              <option value="4262" />
+              <option value="4533" />
             </startOffsets>
             <endOffsets>
-              <option value="4263" />
+              <option value="4534" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="7" />

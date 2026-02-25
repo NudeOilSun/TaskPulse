@@ -140,7 +140,7 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task GetTaskById_ResourceMissing_ReturnsNotFound()
     {
         // Act
-        var response = await _client.GetAsync("/tasks/1");
+        var response = await _client.GetAsync("/tasks/100000000001");
     
         //Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -254,6 +254,66 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
         var updatedTask = await GetTaskFromDatabaseAsync(1);
         updatedTask.Should().NotBeNull();
         updatedTask!.IsDeleted.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public async Task TaskItem_IsDueWithin3Days_IsDueSoonReturnsTrue(int daysAhead)
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(daysAhead));
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+        
+        // Act
+        bool result = testTask.IsDueSoon();
+        
+        // Result
+        result.Should().BeTrue();
+    } 
+    
+    [Fact]
+    public async Task TaskItem_IsDuePast3Days_IsDueSoonReturnsFalse()
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(4));
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+        
+        // Act
+        bool result = testTask.IsDueSoon();
+        
+        // Result
+        result.Should().BeFalse();
+    }
+    
+    [Fact]
+    public async Task TaskItem_IsComplete_IsDueSoonReturnsFalse()
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1), isCompleted: true);
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+        
+        // Act
+        bool result = testTask.IsDueSoon();
+        
+        // Result
+        result.Should().BeFalse();
+    }
+    
+    [Fact]
+    public async Task TaskItem_IsDeleted_IsDueSoonReturnsFalse()
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
+        testTask.Delete();
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+        
+        // Act
+        bool result = testTask.IsDueSoon();
+        
+        // Result
+        result.Should().BeFalse();
     }
     
     private async Task SeedDatabaseAsync(List<TaskItem> tasks)

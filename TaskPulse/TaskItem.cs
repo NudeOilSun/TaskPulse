@@ -55,4 +55,10 @@ public class TaskItem
         Title = title;
         DueDate = dueDate;
     }
+
+    public bool IsDueSoon()
+    {
+        return !this.IsCompleted && !this.IsDeleted &&
+            this.DueDate.Date < DateTime.UtcNow.Date.AddDays(4);
+    }
 }
