@@ -25,6 +25,7 @@ using (var scope = app.Services.CreateScope())
 
 app.UseExceptionHandler(appBuilder =>
 {
+    ILogger logger = appBuilder.ApplicationServices.GetRequiredService<ILogger<Program>>();
     appBuilder.Run(async context =>
     {
         var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
@@ -42,6 +43,17 @@ app.UseExceptionHandler(appBuilder =>
             };
 
             await context.Response.WriteAsJsonAsync(problem);
+        }
+        else
+        {
+            logger.LogError(exception, "Unhandled exception occurred");
+
+            context.Response.StatusCode = 500;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                title = "An unexpected error occurred",
+                status = 500
+            });
         }
     });
 });
@@ -73,7 +85,7 @@ app.MapGet("/tasks", async (TaskPulseDb db, ILogger<Program> logger) =>
             .Where(t => !t.IsDeleted)
             .ToListAsync();
         
-        logger.LogInformation($"Successfully retrieved {tasks.Count} tasks from database");
+        logger.LogInformation("Successfully retrieved {tasks.Count} tasks from database", tasks.Count);
 
         return Results.Ok(tasks);
     }
@@ -82,7 +94,7 @@ app.MapGet("/tasks", async (TaskPulseDb db, ILogger<Program> logger) =>
 
 app.MapGet("/tasks/{id:int}", async (int id, TaskPulseDb db, ILogger<Program> logger) =>
 {
-    logger.LogInformation($"Get Task with ID called with ID: {id}");
+    logger.LogInformation("Get Task with ID called with ID: {id}", id);
 
     var task = await db.Tasks
         .AsNoTracking()
@@ -100,7 +112,7 @@ app.MapGet("/tasks/due-soon", async (TaskPulseDb db, ILogger<Program> logger) =>
         .Where(t => !t.IsCompleted && !t.IsDeleted)
         .ToListAsync();
     
-    logger.LogInformation($"Obtained {tasks.Count} tasks due soon");
+    logger.LogInformation("Obtained {tasks.Count} tasks due soon", tasks.Count);
 
     var result = tasks.Where(t => t.IsDueSoon()).ToList();
 
@@ -138,8 +150,6 @@ app.MapPut("/tasks/{id:int}/complete", async (int id, TaskPulseDb db, ILogger<Pr
     }
 
     task.MarkCompleted();
-
-    db.Tasks.Update(task);
     await db.SaveChangesAsync();
 
     return Results.NoContent();

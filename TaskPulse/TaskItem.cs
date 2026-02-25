@@ -12,9 +12,9 @@ public class TaskItem
     {
     } // EF
 
-    public TaskItem(string title, DateTime dueDate, Boolean isCompleted = false, Boolean isDeleted = false)
+    public TaskItem(string title, DateTime dueDate)
     {
-        if (string.IsNullOrEmpty(title))
+        if (string.IsNullOrWhiteSpace(title))
         {
             throw new ArgumentException("Title cannot be null or empty");
         }
@@ -26,8 +26,8 @@ public class TaskItem
         
         Title = title;
         DueDate = dueDate;
-        IsCompleted = isCompleted;
-        IsDeleted = isDeleted;
+        IsCompleted = false;
+        IsDeleted = false;
     }
 
     public void Delete()
@@ -56,20 +56,9 @@ public class TaskItem
         DueDate = dueDate;
     }
 
-    public bool IsDueSoon()
+    public bool IsDueSoon(int threshold = 3)
     {
         return !this.IsCompleted && !this.IsDeleted &&
-            this.DueDate.Date < DateTime.UtcNow.Date.AddDays(4);
-    }
-
-    public bool ShouldTriggerReminder()
-    {
-        if (this.IsDueSoon())
-        {
-            //do stuff worker here??
-            return true;
-        }
-
-        return false;
+            this.DueDate.Date < DateTime.UtcNow.Date.AddDays(threshold);
     }
 }

@@ -97,11 +97,12 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task GetTasks_ValidRequest_ReturnsNoDeletedTasks()
     {
         //Arrange
-        var testTasks = new List<TaskItem>
-        {
-            new TaskItem("Title 1", DateTime.UtcNow.AddDays(1), isDeleted: false),
-            new TaskItem("naughty", DateTime.UtcNow.AddDays(2), isDeleted: true),
-        };
+        
+        var item1 = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
+        var item2 = new TaskItem("Title 2", DateTime.UtcNow.AddDays(2));
+        item1.Delete();
+        var testTasks = new List<TaskItem> { item1, item2 };
+
     
         // Seed the database with test data
         await SeedDatabaseAsync(testTasks);
@@ -212,7 +213,7 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task CompleteTask_UpdateIsCompleted_UpdatesIsCompleted()
     {
         // Arrange
-        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1), isCompleted: false);
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
         await SeedDatabaseAsync(new List<TaskItem>{testTask});
     
         // Act
@@ -291,7 +292,8 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task TaskItem_IsComplete_IsDueSoonReturnsFalse()
     {
         // Arrange
-        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1), isCompleted: true);
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
+        testTask.MarkCompleted();
         await SeedDatabaseAsync(new List<TaskItem>{testTask});
         
         // Act
@@ -324,7 +326,8 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
         testTask.Delete();
         var testTask2 = new TaskItem("Title 2", DateTime.UtcNow.AddDays(1));
         var testTask3= new TaskItem("Title 3", DateTime.UtcNow.AddDays(4));
-        var testTask4= new TaskItem("Title 4", DateTime.UtcNow.AddDays(1), isCompleted: true);
+        var testTask4= new TaskItem("Title 4", DateTime.UtcNow.AddDays(1));
+        testTask4.MarkCompleted();
         await SeedDatabaseAsync(new List<TaskItem>{testTask, testTask2, testTask3, testTask4});
         
         // Act
