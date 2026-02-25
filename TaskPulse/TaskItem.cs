@@ -61,4 +61,15 @@ public class TaskItem
         return !this.IsCompleted && !this.IsDeleted &&
             this.DueDate.Date < DateTime.UtcNow.Date.AddDays(4);
     }
+
+    public bool ShouldTriggerReminder()
+    {
+        if (this.IsDueSoon())
+        {
+            //do stuff worker here??
+            return true;
+        }
+
+        return false;
+    }
 }

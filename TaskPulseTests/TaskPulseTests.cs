@@ -315,6 +315,44 @@ public class TaskPulseTests : IClassFixture<WebApplicationFactory<Program>>
         // Result
         result.Should().BeFalse();
     }
+
+    [Fact]
+    public async Task GetItemsDueSoon_hasItemsDueSoon_ReturnsOnlyItemsDueSoon()
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
+        testTask.Delete();
+        var testTask2 = new TaskItem("Title 2", DateTime.UtcNow.AddDays(1));
+        var testTask3= new TaskItem("Title 3", DateTime.UtcNow.AddDays(4));
+        var testTask4= new TaskItem("Title 4", DateTime.UtcNow.AddDays(1), isCompleted: true);
+        await SeedDatabaseAsync(new List<TaskItem>{testTask, testTask2, testTask3, testTask4});
+        
+        // Act
+        var response = await _client.GetAsync("tasks/due-soon");
+        
+        // Arrange
+        response.EnsureSuccessStatusCode();
+        var tasks = await response.Content.ReadFromJsonAsync<List<TaskItem>>();
+        tasks.Count.Should().Be(1);
+        tasks.Should().Contain(t => t.Title == "Title 2");
+    } 
+    
+    [Fact]
+    public async Task GetItemsDueSoon_hasNoItemsDueSoon_ReturnsEmptyArray()
+    {
+        // Arrange
+        var testTask = new TaskItem("Title 1", DateTime.UtcNow.AddDays(1));
+        testTask.Delete();
+        await SeedDatabaseAsync(new List<TaskItem>{testTask});
+        
+        // Act
+        var response = await _client.GetAsync("tasks/due-soon");
+        
+        // Arrange
+        response.EnsureSuccessStatusCode();
+        var tasks = await response.Content.ReadFromJsonAsync<List<TaskItem>>();
+        tasks.Should().BeEmpty();
+    }
     
     private async Task SeedDatabaseAsync(List<TaskItem> tasks)
     {
